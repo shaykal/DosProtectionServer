@@ -65,7 +65,7 @@ public class DosServer extends HttpServlet {
 
 
 	// This method does all the main logic of the DOS prevention 
-	private boolean checkAndUpdateClientRequest(final Integer clientId) {
+	public boolean checkAndUpdateClientRequest(final Integer clientId) {
 		boolean answer = false;
 		final long now = System.currentTimeMillis();
 		final Pair<Long, Integer> curClient = requestPerClientMap.get(clientId);
@@ -81,7 +81,7 @@ public class DosServer extends HttpServlet {
 				answer = true;
 			} else { // less than 5 seconds passed. need to check number of requests for this client
 				final Integer numOfRequests = curClient.getSecond();
-				if(numOfRequests > Consts.NUM_OF_REQ_PER_CLIENT){ // need to return error code
+				if(numOfRequests >= Consts.NUM_OF_REQ_PER_CLIENT){ // need to return error code
 					answer = false;
 				} else { // need to update the number of requests and maintain the original timestamp
 					final Pair<Long, Integer> clientInfo = new Pair<Long, Integer>(timeOfClient, numOfRequests + 1);
